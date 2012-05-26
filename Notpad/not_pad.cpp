@@ -2,10 +2,11 @@
 
 QPushButton * quitButton;
 //QTextEdit *editor;
-
+int contador = 0;
 Not_pad::Not_pad(QApplication *app){
 
        editor = new QTextEdit();//Cria um editor de texto dinamicamente
+       lcd = new QLCDNumber();
        //editor -> setText("Texto1");
 
        quitButton = new QPushButton("Quit"); // Cria um Botao dinamicamente no Layout
@@ -30,11 +31,13 @@ Not_pad::Not_pad(QApplication *app){
        QGridLayout *layout = new QGridLayout;
 
             layout->addWidget(editor, 0,0,Qt::AlignCenter);
+
             //layout->addWidget(button1, 0, 0);
             layout->addWidget(button2, 0, 1);
             layout->addWidget(button3, 1, 0, 1, 2);
             layout->addWidget(button4, 2, 0);
             layout->addWidget(button5, 2, 1);
+            layout ->addWidget(lcd, 0,1,Qt::AlignBottom);
 
 
         window = new QWidget;
@@ -47,10 +50,12 @@ void Not_pad :: show(){
 
 void Not_pad :: setarTexto(QString string){
     texto = string;
+    contador ++;
 }
 
 void Not_pad :: exibirTexto(){
     editor -> setText(texto);
+    lcd -> set
 }
 
 

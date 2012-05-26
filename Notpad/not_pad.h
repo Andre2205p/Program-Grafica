@@ -4,6 +4,8 @@
 #include <QTextEdit>
 #include <QVBoxLayout> 
 #include <QGridLayout>
+#include <QFile>
+ #include <QLCDNumber>
 
 class Not_pad : public QObject
 {
@@ -12,7 +14,7 @@ class Not_pad : public QObject
 public:
     Not_pad(QApplication *app);
     void show();
-    void setarTexto(QString string);
+    void setarTexto(QString string);    
 
 
 public slots:
@@ -22,5 +24,7 @@ private:
     QWidget * window;
     QTextEdit *editor;
     QString texto;
+    QLCDNumber * lcd;
+
 
 };
