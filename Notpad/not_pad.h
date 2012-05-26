@@ -6,6 +6,7 @@
 #include <QGridLayout>
 #include <QFile>
  #include <QLCDNumber>
+#include <QFrame>
 
 class Not_pad : public QObject
 {
@@ -19,12 +20,14 @@ public:
 
 public slots:
     void exibirTexto();
+    void incrementaDisplay();
 
 private:
     QWidget * window;
     QTextEdit *editor;
     QString texto;
-    QLCDNumber * lcd;
+    QLCDNumber *lcd;
+    int contador;
 
 
 };

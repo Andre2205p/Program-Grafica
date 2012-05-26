@@ -2,7 +2,7 @@
 
 QPushButton * quitButton;
 //QTextEdit *editor;
-int contador = 0;
+
 Not_pad::Not_pad(QApplication *app){
 
        editor = new QTextEdit();//Cria um editor de texto dinamicamente
@@ -10,6 +10,7 @@ Not_pad::Not_pad(QApplication *app){
        //editor -> setText("Texto1");
 
        quitButton = new QPushButton("Quit"); // Cria um Botao dinamicamente no Layout
+       contador = 0;
 
        QPushButton *button1 = new QPushButton("One");
        QPushButton *button2 = new QPushButton("Two");
@@ -50,12 +51,16 @@ void Not_pad :: show(){
 
 void Not_pad :: setarTexto(QString string){
     texto = string;
+}
+
+void Not_pad :: incrementaDisplay(){
     contador ++;
+    lcd -> display(contador);
 }
 
 void Not_pad :: exibirTexto(){
     editor -> setText(texto);
-    lcd -> set
+
 }
 
 
