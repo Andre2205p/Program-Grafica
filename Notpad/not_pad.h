@@ -7,6 +7,7 @@
 #include <QFile>
  #include <QLCDNumber>
 #include <QFrame>
+#include <QTimer>
 
 class Not_pad : public QObject
 {
@@ -21,13 +22,18 @@ public:
 public slots:
     void exibirTexto();
     void incrementaDisplay();
+    void incrementaDisplayAuto();
+    void chamaNovaTela();
 
 private:
-    QWidget * window;
+    QWidget *window, *newWindow;
     QTextEdit *editor;
     QString texto;
-    QLCDNumber *lcd;
-    int contador;
+    QLCDNumber *lcd1, *lcd2;
+    QFile *fila;
+    QTimer *tempo;
+    QBoxLayout *layout;
+    int contadorAuto, contador;
 
 
 };

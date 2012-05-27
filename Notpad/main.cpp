@@ -18,8 +18,8 @@ int main(int argc, char **argv)
 
     Welcome_Windows wwin;
     wwin.setText("Ok");
-
     wwin.show();
+
     QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(exibirTexto()));
     QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(incrementaDisplay()));
 
