@@ -8,8 +8,15 @@
  #include <QLCDNumber>
 #include <QFrame>
 #include <QTimer>
+#include <QProgressBar>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
+#include <QMainWindow>
 
-class Not_pad : public QObject
+
+
+class Not_pad : public QMainWindow //public QObject
 {
     Q_OBJECT
 
@@ -17,23 +24,34 @@ public:
     Not_pad(QApplication *app);
     void show();
     void setarTexto(QString string);    
-
+    void createMenu();
 
 public slots:
     void exibirTexto();
     void incrementaDisplay();
     void incrementaDisplayAuto();
     void chamaNovaTela();
+    void open();
+    void barraDeProgresso();
 
 private:
+     int contadorAuto, contador, contadorBarra, baseTempo;
+
     QWidget *window, *newWindow;
     QTextEdit *editor;
-    QString texto;
+    QString texto, log, temp;
     QLCDNumber *lcd1, *lcd2;
-    QFile *fila;
     QTimer *tempo;
-    QBoxLayout *layout;
-    int contadorAuto, contador;
+    QBoxLayout *QBoxlayout;
+    QApplication * aplc;
+    QMenuBar *menuBar;
+    QMenu *fileMenu, *helpMenu;
+    QAction *exitAction, *openAction, *newAction, *helpAction;
+    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoBarraProgresso;
+    QGridLayout *QGridlayout;
+    QFile *file;
+    QProgressBar *barraProgresso;
+
 
 
 };
