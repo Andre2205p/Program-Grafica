@@ -5,7 +5,7 @@
 #include <QVBoxLayout> 
 #include <QGridLayout>
 #include <QFile>
- #include <QLCDNumber>
+#include <QLCDNumber>
 #include <QFrame>
 #include <QTimer>
 #include <QProgressBar>
@@ -13,8 +13,6 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QMainWindow>
-
-
 
 class Not_pad : public QMainWindow //public QObject
 {
@@ -33,6 +31,7 @@ public slots:
     void chamaNovaTela();
     void open();
     void barraDeProgresso();
+    void play();
 
 private:
      int contadorAuto, contador, contadorBarra, baseTempo;
@@ -47,11 +46,9 @@ private:
     QMenuBar *menuBar;
     QMenu *fileMenu, *helpMenu;
     QAction *exitAction, *openAction, *newAction, *helpAction;
-    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoBarraProgresso;
+    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoBarraProgresso, *botaoSound;
     QGridLayout *QGridlayout;
     QFile *file;
     QProgressBar *barraProgresso;
-
-
 
 };

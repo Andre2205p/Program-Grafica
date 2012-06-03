@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 
     QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(exibirTexto()));
     QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(incrementaDisplay()));
-    //QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(barraDeProgresso()));
+    //QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(play()));
 
     return app.exec();
 }

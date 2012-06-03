@@ -2,6 +2,8 @@
 #include "menu.h"
 #include "welcome_window.h"
 #include <QtGui>
+#include <QSound>
+#include <QLabel>
 
 //Exercício: QFrame, QKeyEvent, QSound, QImage
 
@@ -9,6 +11,15 @@ Not_pad::Not_pad(QApplication *app){
 
     baseTempo = 60;
     contadorBarra = 0;
+
+    QImage myImage;
+    myImage.load("c:/git.png");
+    QLabel myLabel;
+    myLabel.setPixmap(QPixmap::fromImage(myImage));
+    myLabel.show();
+
+    QSound sound("c:/Windows/Media/chimes.wav");
+    sound.play();
 
        editor = new QTextEdit();//Cria um editor de texto dinamicamente
        if(editor == NULL){
@@ -92,11 +103,33 @@ Not_pad::Not_pad(QApplication *app){
            editor -> setText(log);
        }
 
+       menuBar = new QMenuBar;
+       if(menuBar == NULL){
+            editor -> setText("Menu Bar Falhou!");
+       }else{
+           temp = log;
+           log = temp + "\n" + "Menu Bar Sucesso!";
+           editor -> setText(log);
+       }
 
+       fileMenu = new QMenu(tr("&File"), this);
+       if(fileMenu == NULL){
+            editor -> setText("File Menu Falhou!");
+       }else{
+           temp = log;
+           log = temp + "\n" + "File Menu Sucesso!";
+           editor -> setText(log);
+       }
 
-       //QPushButton *button1 = new QPushButton("One");
+       botaoSound = new QPushButton("Sound");
+       if(botaoSound == NULL){
+                   editor -> setText("Botao Sound Falhou!");
+              }else{
+                  temp = log;
+                  log = temp + "\n" + "Botao Sound Sucesso!";
+                  editor -> setText(log);
+              }
        //QPushButton *button3 = new QPushButton("Three");
-
 
        contadorAuto = 0;
        aplc = app;
@@ -106,7 +139,7 @@ Not_pad::Not_pad(QApplication *app){
 
        incrementaDisplay();
        barraProgresso = new QProgressBar();
-       barraProgresso->setRange(0,60);
+       barraProgresso->setRange(0,60); // Range de 60 segundos para o barra de progresso
 
        createMenu();
 
@@ -115,7 +148,7 @@ Not_pad::Not_pad(QApplication *app){
        QObject::connect(botaoSair, SIGNAL(clicked()),app, SLOT(quit()));//Comando para dar a funçao de fechar ao botão
        QObject::connect(botaoIncrementaDisplay, SIGNAL(clicked()),this, SLOT(incrementaDisplay()));//O botaoIncrementaDisplay chama a funçao incrmentaDisplay()
        QObject::connect(botaoNovaJanela, SIGNAL(clicked()),this, SLOT(chamaNovaTela()));//O botaoNovaJanela2 chama a funçao chamaNovaTela()       
-       QObject :: connect (botaoBarraProgresso,SIGNAL(clicked()),this,SLOT(barraDeProgresso()));
+       QObject::connect(botaoSound, SIGNAL(clicked()),this, SLOT(play()));
 
        /*
         //Layout Vertical
@@ -143,10 +176,7 @@ Not_pad::Not_pad(QApplication *app){
             QGridlayout->addWidget(botaoSair, 4,0);
             QGridlayout->setMenuBar(menuBar);
             QGridlayout->addWidget(barraProgresso, 5,0);
-
-            //layout->addWidget(button1, 0, 0);
-            //layout->addWidget(button3, 1, 0, 1, 2);
-            //layout ->addWidget(lcd1,3,0Qt::AlignBottom);
+            QGridlayout->addWidget(botaoSound, 5,1);
 
         window = new QWidget;
         if(window == NULL){
@@ -157,6 +187,13 @@ Not_pad::Not_pad(QApplication *app){
             editor -> setText(log);
         }
         window -> setLayout(QGridlayout);
+}
+void Not_pad :: play(){
+    QString fileSound = QFileDialog::getOpenFileName(this);//Abre uma Janela para escplher o Som
+    QSound sound(fileSound);
+    sound.play();
+
+
 }
 
 void Not_pad :: show(){
@@ -182,7 +219,7 @@ void Not_pad :: barraDeProgresso(){
         contadorBarra ++;
     }
 
-    /*
+    /*Converte Inteiro em String
         QVariant v = 0;
         baseTempo = 10;
         v.setValue(baseTempo);
@@ -206,8 +243,6 @@ void Not_pad :: exibirTexto(){
     file -> setFileName("i.txt");
 }
 
-//***********************************
-
 void Not_pad:: chamaNovaTela(){
    QBoxlayout = new QVBoxLayout;
    if(QBoxlayout == NULL){
@@ -229,28 +264,12 @@ void Not_pad:: chamaNovaTela(){
 
    newWindow -> setLayout(QBoxlayout);
    newWindow -> show();
-
 }
 
+// Cria uma barra de menu superior da Janela
 void Not_pad :: createMenu(){
 
-    menuBar = new QMenuBar;
-    if(menuBar == NULL){
-         editor -> setText("Menu Bar Falhou!");
-    }else{
-        temp = log;
-        log = temp + "\n" + "Menu Bar Sucesso!";
-        editor -> setText(log);
-    }
 
-    fileMenu = new QMenu(tr("&File"), this);
-    if(fileMenu == NULL){
-         editor -> setText("File Menu Falhou!");
-    }else{
-        temp = log;
-        log = temp + "\n" + "File Menu Sucesso!";
-        editor -> setText(log);
-    }
 
     newAction = fileMenu->addAction(tr("N&ew"));
     openAction = fileMenu->addAction(tr("O&pen..."));
@@ -273,6 +292,7 @@ void Not_pad :: createMenu(){
     menuBar->addMenu(helpMenu);
 }
 
+// Abre uma janela para escolher o arquivo
 void Not_pad::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this);
@@ -295,6 +315,7 @@ void Not_pad::open()
 
            return;
 
+    //Escreve em um arquivo escolhido
     QFile file("i.txt");
          if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
          return;
