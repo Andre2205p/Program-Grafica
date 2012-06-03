@@ -14,6 +14,7 @@ Not_pad::Not_pad(QApplication *app){
 
     QImage myImage;
     myImage.load("c:/git.png");
+
     QLabel myLabel;
     myLabel.setPixmap(QPixmap::fromImage(myImage));
     myLabel.show();
