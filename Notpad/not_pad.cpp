@@ -12,12 +12,16 @@ Not_pad::Not_pad(QApplication *app){
     baseTempo = 60;
     contadorBarra = 0;
 
-    QImage myImage;
-    myImage.load("c:/git.png");
-
-    QLabel myLabel;
-    myLabel.setPixmap(QPixmap::fromImage(myImage));
-    myLabel.show();
+    inputImg = new QImage("c:/farol.png");
+    imgDisplayLabel = new QLabel("");
+    imgDisplayLabel->setPixmap(QPixmap::fromImage(*inputImg));
+    imgDisplayLabel->adjustSize();
+    //scrollArea = new QScrollArea();
+    //scrollArea->setWidget(imgDisplayLabel);
+    ///scrollArea->setMinimumSize(256,256);
+    //scrollArea->setMaximumSize(512,512);
+    //gridLayout->addWidget(scrollArea,6,0);
+    //setLayout(gridLayout);
 
     QSound sound("c:/Windows/Media/chimes.wav");
     sound.play();
@@ -178,6 +182,7 @@ Not_pad::Not_pad(QApplication *app){
             QGridlayout->setMenuBar(menuBar);
             QGridlayout->addWidget(barraProgresso, 5,0);
             QGridlayout->addWidget(botaoSound, 5,1);
+            QGridlayout->addWidget(imgDisplayLabel,6,0, 6, 2);
 
         window = new QWidget;
         if(window == NULL){
@@ -189,12 +194,11 @@ Not_pad::Not_pad(QApplication *app){
         }
         window -> setLayout(QGridlayout);
 }
+
 void Not_pad :: play(){
     QString fileSound = QFileDialog::getOpenFileName(this);//Abre uma Janela para escplher o Som
     QSound sound(fileSound);
     sound.play();
-
-
 }
 
 void Not_pad :: show(){

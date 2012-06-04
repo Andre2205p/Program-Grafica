@@ -14,6 +14,12 @@
 #include <QAction>
 #include <QMainWindow>
 
+#include <QScrollArea>
+#include <QLabel>
+#include <QImage>
+
+#include <QGroupBox>
+
 class Not_pad : public QMainWindow //public QObject
 {
     Q_OBJECT
@@ -50,5 +56,12 @@ private:
     QGridLayout *QGridlayout;
     QFile *file;
     QProgressBar *barraProgresso;
+
+    //QGridLayout* gridLayout;
+    QImage* inputImg;
+    QLabel* imgDisplayLabel;
+    QScrollArea* scrollArea;
+
+
 
 };
