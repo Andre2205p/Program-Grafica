@@ -7,7 +7,6 @@
 
 class Welcome_Windows : public QPushButton
 {
-//Construtor Vazio
 public:
     Welcome_Windows() {};
 

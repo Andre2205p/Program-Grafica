@@ -6,18 +6,16 @@
 #include <QGridLayout>
 #include <QFile>
 #include <QLCDNumber>
-#include <QFrame>
 #include <QTimer>
 #include <QProgressBar>
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
 #include <QMainWindow>
-
 #include <QScrollArea>
 #include <QLabel>
 #include <QImage>
-
+#include <QFrame>
 #include <QGroupBox>
 
 class Not_pad : public QMainWindow //public QObject
@@ -38,6 +36,7 @@ public slots:
     void open();
     void barraDeProgresso();
     void play();
+   // void frame();
 
 private:
      int contadorAuto, contador, contadorBarra, baseTempo;
@@ -52,7 +51,7 @@ private:
     QMenuBar *menuBar;
     QMenu *fileMenu, *helpMenu;
     QAction *exitAction, *openAction, *newAction, *helpAction;
-    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoBarraProgresso, *botaoSound;
+    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoBarraProgresso, *botaoSound, *botaoFrame;
     QGridLayout *QGridlayout;
     QFile *file;
     QProgressBar *barraProgresso;
@@ -61,7 +60,5 @@ private:
     QImage* inputImg;
     QLabel* imgDisplayLabel;
     QScrollArea* scrollArea;
-
-
 
 };

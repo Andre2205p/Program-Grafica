@@ -1,16 +1,35 @@
 #include "not_pad.h"
 #include "menu.h"
 #include "welcome_window.h"
+#include "frame.h"
 #include <QtGui>
 #include <QSound>
 #include <QLabel>
+#include <QFrame>
 
-//Exercício: QFrame, QKeyEvent, QSound, QImage
+//Exercício: QFrame, QKeyEvent
 
 Not_pad::Not_pad(QApplication *app){
 
     baseTempo = 60;
     contadorBarra = 0;
+
+    /*
+    QLabel *boatIcon = new QLabel(this);
+    boatIcon->setPixmap(QPixmap("c:/boat.png"));
+    boatIcon->move(10, 10);
+    //boatIcon->show();
+
+    QLabel *carIcon = new QLabel(this);
+    carIcon->setPixmap(QPixmap("c:/car.png"));
+    carIcon->move(100, 10);
+    //carIcon->show();
+
+    QLabel *houseIcon = new QLabel(this);
+    houseIcon->setPixmap(QPixmap("c:/house.png"));
+    houseIcon->move(10, 80);
+    //houseIcon->show();
+    */
 
     inputImg = new QImage("c:/farol.png");
     imgDisplayLabel = new QLabel("");
@@ -134,6 +153,16 @@ Not_pad::Not_pad(QApplication *app){
                   log = temp + "\n" + "Botao Sound Sucesso!";
                   editor -> setText(log);
               }
+       /*
+       botaoFrame = new QPushButton("Frame");
+       if(botaoSound == NULL){
+                   editor -> setText("Botao Frame Falhou!");
+              }else{
+                  temp = log;
+                  log = temp + "\n" + "Botao Frame Sucesso!";
+                  editor -> setText(log);
+              }
+       */
        //QPushButton *button3 = new QPushButton("Three");
 
        contadorAuto = 0;
@@ -181,7 +210,7 @@ Not_pad::Not_pad(QApplication *app){
             QGridlayout->addWidget(botaoSair, 4,0);
             QGridlayout->setMenuBar(menuBar);
             QGridlayout->addWidget(barraProgresso, 5,0);
-            QGridlayout->addWidget(botaoSound, 5,1);
+            QGridlayout->addWidget(botaoSound, 5,1);            
             QGridlayout->addWidget(imgDisplayLabel,6,0, 6, 2);
 
         window = new QWidget;
@@ -194,6 +223,34 @@ Not_pad::Not_pad(QApplication *app){
         }
         window -> setLayout(QGridlayout);
 }
+
+/*
+void Frame :: frame(){
+    setMinimumSize(300, 300);
+
+    setFrameStyle(QFrame::Sunken | QFrame::Box);
+    //setFrameStyle(QFrame::Sunken);
+    //setAcceptDrops(true);
+
+    QLabel *boatIcon = new QLabel(this);
+    boatIcon->setPixmap(QPixmap("C:/boat.png"));
+    boatIcon->move(10, 10);
+    boatIcon->show();
+
+    QLabel *carIcon = new QLabel(this);
+    carIcon->setPixmap(QPixmap("C:/car.png"));
+    carIcon->move(100, 10);
+    carIcon->show();
+
+    QLabel *houseIcon = new QLabel(this);
+    houseIcon->setPixmap(QPixmap("c:/house.png"));
+    houseIcon->move(10, 80);
+    houseIcon->show();
+
+}
+*/
+
+
 
 void Not_pad :: play(){
     QString fileSound = QFileDialog::getOpenFileName(this);//Abre uma Janela para escplher o Som

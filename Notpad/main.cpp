@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include "not_pad.h"
 #include "welcome_window.h"
+#include "frame.h"
 
 int main(int argc, char **argv)
 {
@@ -22,8 +23,19 @@ int main(int argc, char **argv)
 
     QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(exibirTexto()));
     QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(incrementaDisplay()));
-    //QObject :: connect (&wwin,SIGNAL(clicked()),&note,SLOT(play()));
 
+    /*
+    QWidget mainWidget;
+    QHBoxLayout *horizontalLayout = new QHBoxLayout;
+    //horizontalLayout->addWidget(new Frame);
+    horizontalLayout->addWidget(new Not_pad);
+
+    mainWidget.setLayout(horizontalLayout);
+    mainWidget.setWindowTitle(QObject::tr("Draggable Icons"));
+
+    mainWidget.show();
+    QObject :: connect (&mainWidget,SIGNAL(clicked()),&note,SLOT(frame()));
+    */
     return app.exec();
 }
 
