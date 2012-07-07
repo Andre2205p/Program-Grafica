@@ -6,12 +6,11 @@
 #include "not_pad.h"
 #include "welcome_window.h"
 #include "frame.h"
+#include "windows.h"
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv);
-
-    //Notpad note;
+    QApplication app(argc, argv);    
 
     Not_pad note(&app);
     note.show();

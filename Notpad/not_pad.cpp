@@ -6,41 +6,17 @@
 #include <QSound>
 #include <QLabel>
 #include <QFrame>
-
-//Exercício: QFrame, QKeyEvent
+#include"windows.h"
 
 Not_pad::Not_pad(QApplication *app){
 
     baseTempo = 60;
     contadorBarra = 0;
 
-    /*
-    QLabel *boatIcon = new QLabel(this);
-    boatIcon->setPixmap(QPixmap("c:/boat.png"));
-    boatIcon->move(10, 10);
-    //boatIcon->show();
-
-    QLabel *carIcon = new QLabel(this);
-    carIcon->setPixmap(QPixmap("c:/car.png"));
-    carIcon->move(100, 10);
-    //carIcon->show();
-
-    QLabel *houseIcon = new QLabel(this);
-    houseIcon->setPixmap(QPixmap("c:/house.png"));
-    houseIcon->move(10, 80);
-    //houseIcon->show();
-    */
-
-    inputImg = new QImage("c:/farol.png");
+    imagem = new QImage("C:/smiley.png");
     imgDisplayLabel = new QLabel("");
-    imgDisplayLabel->setPixmap(QPixmap::fromImage(*inputImg));
+    imgDisplayLabel->setPixmap(QPixmap::fromImage(*imagem));
     imgDisplayLabel->adjustSize();
-    //scrollArea = new QScrollArea();
-    //scrollArea->setWidget(imgDisplayLabel);
-    ///scrollArea->setMinimumSize(256,256);
-    //scrollArea->setMaximumSize(512,512);
-    //gridLayout->addWidget(scrollArea,6,0);
-    //setLayout(gridLayout);
 
     QSound sound("c:/Windows/Media/chimes.wav");
     sound.play();
@@ -60,7 +36,6 @@ Not_pad::Not_pad(QApplication *app){
            temp = log;
            log = temp + "\n" + "LCD1 Sucesso!";
            editor -> setText(log);
-
        }
 
        lcd2 = new QLCDNumber();
@@ -118,12 +93,12 @@ Not_pad::Not_pad(QApplication *app){
            editor -> setText(log);
        }
 
-       botaoBarraProgresso = new QPushButton("Barra Progresso");
-       if(botaoBarraProgresso == NULL){
-            editor -> setText("Botão Barra Progresso Falhou!");
+       botaoQFrame = new QPushButton("QFrame");
+       if(botaoQFrame == NULL){
+            editor -> setText("Botão QFrame Falhou!");
        }else{
            temp = log;
-           log = temp + "\n" + "Botão Barra Progresso Sucesso!";
+           log = temp + "\n" + "Botão QFrame Sucesso!";
            editor -> setText(log);
        }
 
@@ -153,17 +128,6 @@ Not_pad::Not_pad(QApplication *app){
                   log = temp + "\n" + "Botao Sound Sucesso!";
                   editor -> setText(log);
               }
-       /*
-       botaoFrame = new QPushButton("Frame");
-       if(botaoSound == NULL){
-                   editor -> setText("Botao Frame Falhou!");
-              }else{
-                  temp = log;
-                  log = temp + "\n" + "Botao Frame Sucesso!";
-                  editor -> setText(log);
-              }
-       */
-       //QPushButton *button3 = new QPushButton("Three");
 
        contadorAuto = 0;
        aplc = app;
@@ -176,21 +140,14 @@ Not_pad::Not_pad(QApplication *app){
        barraProgresso->setRange(0,60); // Range de 60 segundos para o barra de progresso
 
        createMenu();
-
-       contador = 0;       
+       contador = 0;
 
        QObject::connect(botaoSair, SIGNAL(clicked()),app, SLOT(quit()));//Comando para dar a funçao de fechar ao botão
        QObject::connect(botaoIncrementaDisplay, SIGNAL(clicked()),this, SLOT(incrementaDisplay()));//O botaoIncrementaDisplay chama a funçao incrmentaDisplay()
        QObject::connect(botaoNovaJanela, SIGNAL(clicked()),this, SLOT(chamaNovaTela()));//O botaoNovaJanela2 chama a funçao chamaNovaTela()       
        QObject::connect(botaoSound, SIGNAL(clicked()),this, SLOT(play()));
-
-       /*
-        //Layout Vertical
-        QVBoxLayout *layout = new QVBoxLayout;
-            layout -> addWidget(editor);
-            layout -> addWidget((quitButton));
-            layout -> addWidget((botao));
-        */
+       QObject::connect(botaoSound, SIGNAL(clicked()),this, SLOT(play()));
+       QObject::connect(botaoQFrame, SIGNAL(clicked()),this, SLOT(frame()));
 
        QGridlayout = new QGridLayout;
        if(QGridlayout == NULL){
@@ -206,12 +163,12 @@ Not_pad::Not_pad(QApplication *app){
             QGridlayout->addWidget(botaoIncrementaDisplay, 2, 1);
             QGridlayout ->addWidget(lcd2,3,1);
             QGridlayout->addWidget(botaoNovaJanela, 2, 0);
-            QGridlayout->addWidget(botaoBarraProgresso, 4, 1);
+            QGridlayout->addWidget(botaoQFrame, 4, 1);
             QGridlayout->addWidget(botaoSair, 4,0);
             QGridlayout->setMenuBar(menuBar);
             QGridlayout->addWidget(barraProgresso, 5,0);
             QGridlayout->addWidget(botaoSound, 5,1);            
-            QGridlayout->addWidget(imgDisplayLabel,6,0, 6, 2);
+            QGridlayout->addWidget(imgDisplayLabel);
 
         window = new QWidget;
         if(window == NULL){
@@ -224,38 +181,33 @@ Not_pad::Not_pad(QApplication *app){
         window -> setLayout(QGridlayout);
 }
 
-/*
-void Frame :: frame(){
-    setMinimumSize(300, 300);
+void Not_pad :: frame(){
 
-    setFrameStyle(QFrame::Sunken | QFrame::Box);
-    //setFrameStyle(QFrame::Sunken);
-    //setAcceptDrops(true);
+    windows win;
+    win.show();
+    QObject :: connect (&win,SIGNAL(clicked()),this,SLOT(frame()));
 
-    QLabel *boatIcon = new QLabel(this);
-    boatIcon->setPixmap(QPixmap("C:/boat.png"));
-    boatIcon->move(10, 10);
-    boatIcon->show();
+    /*
+    qframe = new QWidget;
+//    qframe -> setLayout(QBoxlayout);
+    qframe -> show();
+   */
 
-    QLabel *carIcon = new QLabel(this);
-    carIcon->setPixmap(QPixmap("C:/car.png"));
-    carIcon->move(100, 10);
-    carIcon->show();
 
-    QLabel *houseIcon = new QLabel(this);
-    houseIcon->setPixmap(QPixmap("c:/house.png"));
-    houseIcon->move(10, 80);
-    houseIcon->show();
+    //windows win;
+    //win.show();
 
 }
-*/
-
-
 
 void Not_pad :: play(){
     QString fileSound = QFileDialog::getOpenFileName(this);//Abre uma Janela para escplher o Som
     QSound sound(fileSound);
     sound.play();
+}
+
+void Not_pad :: som(){
+    QSound som("c:/Windows/Media/chimes.wav");
+    som.play();
 }
 
 void Not_pad :: show(){
@@ -277,17 +229,11 @@ void Not_pad :: barraDeProgresso(){
     if(contadorAuto == baseTempo ){
         contadorBarra = 0;
         baseTempo = baseTempo + 60;
+        som();
     }else{
         contadorBarra ++;
     }
 
-    /*Converte Inteiro em String
-        QVariant v = 0;
-        baseTempo = 10;
-        v.setValue(baseTempo);
-        editor->setText(v.toString());
-    }
-    */
 }
 
 void Not_pad :: incrementaDisplayAuto(){
@@ -329,10 +275,8 @@ void Not_pad:: chamaNovaTela(){
 }
 
 // Cria uma barra de menu superior da Janela
-void Not_pad :: createMenu(){
-
-
-
+void Not_pad :: createMenu()
+{
     newAction = fileMenu->addAction(tr("N&ew"));
     openAction = fileMenu->addAction(tr("O&pen..."));
     fileMenu->addSeparator();
@@ -365,6 +309,38 @@ void Not_pad::open()
             editor -> setText(texto);
 }
 
+/*
+    //scrollArea = new QScrollArea();
+    //scrollArea->setWidget(imgDisplayLabel);
+    ///scrollArea->setMinimumSize(256,256);
+    //scrollArea->setMaximumSize(512,512);
+    //gridLayout->addWidget(scrollArea,6,0);
+    //setLayout(gridLayout);
+
+QLabel *boatIcon = new QLabel(this);
+boatIcon->setPixmap(QPixmap("c:/boat.png"));
+boatIcon->move(10, 10);
+//boatIcon->show();
+
+QLabel *carIcon = new QLabel(this);
+carIcon->setPixmap(QPixmap("c:/car.png"));
+carIcon->move(100, 10);
+//carIcon->show();
+
+QLabel *houseIcon = new QLabel(this);
+houseIcon->setPixmap(QPixmap("c:/house.png"));
+houseIcon->move(10, 80);
+//houseIcon->show();
+
+
+        //Layout Vertical
+        QVBoxLayout *layout = new QVBoxLayout;
+            layout -> addWidget(editor);
+            layout -> addWidget((quitButton));
+            layout -> addWidget((botao));
+
+
+*/
 
 /*
     QString fileName = QFileDialog::getOpenFileName(this);
@@ -386,7 +362,15 @@ void Not_pad::open()
          out << "The magic number is: " << 50 << "\n";
    */
 
+//QPushButton *button3 = new QPushButton("Three");
 
+/*Converte Inteiro em String
+    QVariant v = 0;
+    baseTempo = 10;
+    v.setValue(baseTempo);
+    editor->setText(v.toString());
+}
+*/
 
 
 

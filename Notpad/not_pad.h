@@ -4,10 +4,10 @@
 #include <QTextEdit>
 #include <QVBoxLayout> 
 #include <QGridLayout>
-#include <QFile>
 #include <QLCDNumber>
 #include <QTimer>
 #include <QProgressBar>
+#include <QFile>
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
@@ -36,28 +36,30 @@ public slots:
     void open();
     void barraDeProgresso();
     void play();
-   // void frame();
+    void som();
+    void frame();
 
 private:
      int contadorAuto, contador, contadorBarra, baseTempo;
 
-    QWidget *window, *newWindow;
+    QWidget *window, *newWindow, *qframe;
     QTextEdit *editor;
     QString texto, log, temp;
     QLCDNumber *lcd1, *lcd2;
+
     QTimer *tempo;
     QBoxLayout *QBoxlayout;
     QApplication * aplc;
     QMenuBar *menuBar;
     QMenu *fileMenu, *helpMenu;
     QAction *exitAction, *openAction, *newAction, *helpAction;
-    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoBarraProgresso, *botaoSound, *botaoFrame;
+    QPushButton * botaoSair, *botaoIncrementaDisplay, *botaoNovaJanela, *botaoQFrame, *botaoSound, *botaoFrame;
     QGridLayout *QGridlayout;
     QFile *file;
     QProgressBar *barraProgresso;
 
     //QGridLayout* gridLayout;
-    QImage* inputImg;
+    QImage* imagem;
     QLabel* imgDisplayLabel;
     QScrollArea* scrollArea;
 
