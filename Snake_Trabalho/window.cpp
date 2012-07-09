@@ -6,16 +6,24 @@ Window::Window(QWidget *parent)
 
     layout = new QGridLayout;
     file = new QFile();
-    lcdLevel_1 = new QLCDNumber();
-    lcdLevel_2 = new QLCDNumber();
+    lcdLevel = new QLCDNumber();
+    lcdScore = new QLCDNumber();
     labelLevel = new QLabel("Level:",this);
     labelScore = new QLabel("Score:",this);    
+    labelLife = new QLabel("Vida:",this);
     botaoStart = new QPushButton("Start");
     botaoPause = new QPushButton("Pause");
     botaoReset = new QPushButton("Reset");
     menuBar = new QMenuBar;
     fileMenu = new QMenu(tr("&File"), this);
-    barraProgresso = new QProgressBar();
+    barraProgresso = new QProgressBar();    
+    barraVida = new QProgressBar();
+    contadorBarra = 1;
+    baseScore = 10;
+    tamInicioBarra = 0;
+    tamFimBarra = baseScore;
+    barraVida->setMaximum(3);
+    contadorVida = 0;
 
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -23,8 +31,12 @@ Window::Window(QWidget *parent)
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
     connect(botaoStart, SIGNAL(clicked()), quadro, SLOT(inicio()));
     connect(botaoPause, SIGNAL(clicked()), quadro, SLOT(pausa()));
-    connect(quadro, SIGNAL(nivelDificuldade(int)), lcdLevel_1, SLOT(display(int)));
-    connect(quadro, SIGNAL(pontosGanho(int)), lcdLevel_2, SLOT(display(int)));
+    connect(botaoReset, SIGNAL(clicked()), quadro, SLOT(reset()));
+    connect(quadro, SIGNAL(nivelDificuldade(int)), lcdLevel, SLOT(display(int)));
+    connect(quadro, SIGNAL(pontosGanho(int)), lcdScore, SLOT(display(int)));
+    connect(quadro, SIGNAL(barra_Progresso()), this, SLOT(barraDeProgresso()));
+    connect(quadro, SIGNAL(barra_Vida()), this, SLOT(barraDeVida()));
+    connect(quadro, SIGNAL(sinalReset()), this, SLOT(resetBarraProgresso()));
 
     this->resize(304,400);
     this->setMaximumSize(304,400);
@@ -33,19 +45,62 @@ Window::Window(QWidget *parent)
     quadro->setMaximumSize(304,400);
 
     createMenu();
-    layout->addWidget(menuBar);        
-    layout->addWidget(quadro,3,0,10,2);
-    layout->addWidget(labelLevel, 3, 3);
-    layout->addWidget(lcdLevel_1,4,3);
-    layout->addWidget(labelScore, 5, 3);
-    layout->addWidget(lcdLevel_2,6,3);
-    layout->addWidget(botaoStart,7,3);
-    layout->addWidget(botaoPause,8,3);
-    layout->addWidget(botaoReset,9,3);
+    layout->addWidget(menuBar);
+    layout->addWidget(quadro,3,0,10,3);
+    layout->addWidget(labelLevel, 3, 4);
+    layout->addWidget(lcdLevel,4,4);
+    layout->addWidget(labelScore, 5,4);
+    layout->addWidget(lcdScore,6,4);
+    layout->addWidget(botaoStart,7,4);
+    layout->addWidget(botaoPause,8,4);
+    layout->addWidget(botaoReset,9,4);
     layout->addWidget(barraProgresso);
+    layout->addWidget(labelLife);
+    layout->addWidget(barraVida);
 
     this->setLayout(layout);
     this->show();
+}
+
+void Window::resetBarraProgresso()
+{
+    tamInicioBarra = 0;
+    tamFimBarra = 10;
+    baseScore =10;
+    contadorBarra = 0;
+    contadorVida = 0;
+    barraProgresso->reset();
+    barraVida->reset();
+    lcdScore->display(0);
+    lcdLevel->display(1);
+}
+
+void Window::resetBarraVida()
+{
+    barraVida->reset();
+    contadorVida = 0;
+}
+
+void Window::barraDeVida()
+{
+    contadorVida ++;
+    barraVida->setValue(contadorVida);
+}
+
+void Window::barraDeProgresso()
+{
+    barraProgresso->setRange(tamInicioBarra, tamFimBarra); // Range de 60 segundos para o barra de progresso
+    barraProgresso->setValue(contadorBarra);   
+
+    if(contadorBarra == baseScore ){
+        tamInicioBarra = baseScore;
+        barraProgresso->reset();
+        baseScore = baseScore + 10;
+        tamFimBarra = baseScore;
+        contadorBarra ++;
+    }else{
+        contadorBarra ++;
+    }
 }
 
 void Window :: createMenu()
@@ -78,5 +133,6 @@ void Window::about()
     labelAbout = new QLabel();
     labelAbout->setText(tr("Invoked <b>About</b>"));
     QMessageBox::about(this, tr("About"),
-            tr("<b>André G. da Silva</b> - 164164<p>Engenharia da Computação</p>UNOESC"));
+            tr("Acadêmico:<b> André G. da Silva</b> - 164164<p>Curso: Engenharia da Computação</p>"
+               "<p>Disciplina: Programação Móvel</p> UNOESC"));
 }

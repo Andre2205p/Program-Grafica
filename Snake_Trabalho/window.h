@@ -11,19 +11,19 @@ public:
     Window(QWidget *parent=0);
 
 private:
-    QLabel *labelLevel, *labelScore, *label_imagem;
+    QLabel *labelLevel, *labelScore, *label_imagem, *labelLife;
 
     Board *quadro;
     QGridLayout *layout;
 
-    QLCDNumber *lcdLevel_1, *lcdLevel_2;
+    QLCDNumber *lcdLevel, *lcdScore;
     QFile *file;
 
     QMenuBar *menuBar;
     QMenu *fileMenu, *helpMenu;
     QAction *exitAction, *openAction, *saveAction, *helpAction;
 
-    QProgressBar *barraProgresso;
+    QProgressBar *barraProgresso, *barraVida;
     QPushButton * botaoStart, *botaoPause, *botaoReset;
 
     QApplication * aplc;
@@ -33,15 +33,18 @@ private:
     QLabel *labelAbout;
     QAction *aboutAct;
 
-    int alturaJanela, larguraJanela, larguraBorda, alturaBorda;
+    int alturaJanela, larguraJanela, larguraBorda, alturaBorda, contadorBarra, score, baseScore, tamFimBarra,
+        tamInicioBarra, contadorVida;
 
     void createMenu();
 
 public slots:
     void open();
     void about();
-
-
+    void barraDeProgresso();
+    void barraDeVida();
+    void resetBarraProgresso();
+    void resetBarraVida();
 
 };
 
