@@ -1,6 +1,6 @@
-//#include <QGLWidget> //Utilizado para criar uma janela em branco somente com o main
 #include <QApplication>
 #include "winopengl.h"
+//#include <QGLWidget> //Utilizado para criar uma janela em branco somente com o main
 
 int main(int argc, char **argv)
 {
@@ -14,4 +14,6 @@ int main(int argc, char **argv)
     op.show();
 
     return app.exec();
+
 }
+

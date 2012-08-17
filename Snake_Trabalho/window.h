@@ -11,34 +11,24 @@ public:
     Window(QWidget *parent=0);    
 
 private:
-    QLabel *labelLevel, *labelScore, *label_imagem, *labelLife, *scoreLabel;
+    QLabel *labelLevel, *labelScore, *label_imagem, *labelLife, *scoreLabel, *labelAbout, *labelNome, *labelMsn;
     Board *quadro;
     QLCDNumber *lcdLevel, *lcdScore;
     QFile *file;
     QMenuBar *menuBar;
     QMenu *fileMenu, *helpMenu;
-    QAction *exitAction, *clearAction, *saveAction, *helpAction, *openAction;
+    QAction *exitAction, *clearAction, *saveAction, *helpAction, *openAction, *aboutAct;
     QProgressBar *barraProgresso, *barraVida;
-    QPushButton * botaoStart, *botaoPause, *botaoReset;
-    QApplication * aplc;
-    QImage* imagem;
-    QString texto;
-    QLabel *labelAbout;
-    QAction *aboutAct;
-    QString nome, scoreTxt, txtSave, str;
-    QLabel *labelNome, *labelMsn;
-    QLineEdit *edit;
-    QPushButton *botaoSave;
-    QTimer *tempo;
+    QPushButton * botaoStart, *botaoPause, *botaoReset, *botaoSave;
+    QString texto, nome, scoreTxt, txtSave, str;
+    QLineEdit *edit;    
+    QTimer *tempoScore;
     QGridLayout *layout;
-    QHBoxLayout *boxLayout;
-    QBoxLayout *socrewWindow;
-    QVBoxLayout  *scoreLayout;
+    QHBoxLayout *boxLayout;    
     QWidget *newWindow;
 
     int alturaJanela, larguraJanela, larguraBorda, alturaBorda, contadorBarra, score, baseScore, tamFimBarra, scr,
         tamInicioBarra, contadorVida;
-
     bool chek;
 
     void createMenu();    

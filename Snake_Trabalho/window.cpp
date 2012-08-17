@@ -4,12 +4,14 @@ Window::Window(QWidget *parent)
 {
     chek = false;
 
+    //Inicializa componentes
     quadro = new Board(0);
     if(quadro == NULL){
         qDebug() << "quadro Falhou!";
         chek = true;
     }else{
         qDebug() << "quadro Sucesso!";
+
     }
 
     layout = new QGridLayout;
@@ -124,8 +126,8 @@ Window::Window(QWidget *parent)
         qDebug() << "barraVida Sucesso!";
     }
 
-    tempo = new QTimer(this);
-    if(tempo == NULL){
+    tempoScore = new QTimer(this);
+    if(tempoScore == NULL){
         qDebug() << "tempo Falhou!";
         chek = true;
     }else{
@@ -189,6 +191,7 @@ Window::Window(QWidget *parent)
     }
 }
 
+//Mensagem de falha quando um objeto não é inicializado
 void Window::falhaCritica()
 {
     if(chek == true)
@@ -203,6 +206,7 @@ void Window::falhaCritica()
     }
 }
 
+//Auxiliar para reset do jogo
 void Window::resetJogo()
 {
     tamInicioBarra = 0;
@@ -216,18 +220,21 @@ void Window::resetJogo()
     lcdLevel->display(1);
 }
 
+//Auxiliar para reset da barra de vida
 void Window::resetBarraVida()
 {
     barraVida->reset();
     contadorVida = 0;
 }
 
+//incrementa a barra de vida
 void Window::barraDeVida()
 {
     contadorVida ++;
     barraVida->setValue(contadorVida);
 }
 
+//manipula a barra de progresso
 void Window::barraDeProgresso()
 {
     barraProgresso->setRange(tamInicioBarra, tamFimBarra);
@@ -244,6 +251,7 @@ void Window::barraDeProgresso()
     }
 }
 
+//cria menu superior
 void Window :: createMenu()
 {
     saveAction = fileMenu->addAction(tr("&Save Score"));
@@ -264,6 +272,7 @@ void Window :: createMenu()
     menuBar->addMenu(helpMenu);
 }
 
+//Salva scores
 void Window::save()
 {
     scr = quadro->saveSocore;
@@ -327,6 +336,7 @@ void Window::save()
     }
 }
 
+//Grava Score em arquivo
 void Window::writeScore(){
     QFile files("score.dat");
     files.open(QIODevice::WriteOnly);
@@ -342,6 +352,7 @@ void Window::writeScore(){
     chamaOpenScore();
 }
 
+//Lê o score do arquivo
 bool Window::readScore()
 {
     bool isEmpty = false;
@@ -357,9 +368,10 @@ bool Window::readScore()
     return isEmpty;
 }
 
+//Abre uma janela para ler os scores
 void Window::openScores()
 {
-    tempo->stop();
+    tempoScore->stop();
     newWindow->close();
     readScore();
 
@@ -380,6 +392,7 @@ void Window::openScores()
     connect (botaoOk,SIGNAL(clicked()),windowScore,SLOT(close()));
 }
 
+//Lê o arquivo score.dat acrescenta o score atual e grava o arquivo atualizado
 void Window::readWriteScore()
 {
     QFile fil("score.dat");
@@ -405,13 +418,15 @@ void Window::readWriteScore()
     chamaOpenScore();
 }
 
+//tempo para garantir que o arquivo seja gravado para em seguida ser aberto
 void Window::chamaOpenScore()
 {
-    tempo->disconnect();
-    connect(tempo, SIGNAL(timeout()), this, SLOT(openScores()));
-    tempo->start(100);
+    tempoScore->disconnect();
+    connect(tempoScore, SIGNAL(timeout()), this, SLOT(openScores()));
+    tempoScore->start(100);
 }
 
+//apaga todos os scores
 void Window::clearScore()
 {
     QMessageBox::StandardButton ret;
@@ -432,5 +447,5 @@ void Window::about()
     labelAbout->setText(tr("Invoked <b>About</b>"));
     QMessageBox::about(this, tr("About"),
             tr("Acadêmico:<b> André G. da Silva</b> - 164164<p>Curso: Engenharia da Computação</p>"
-               "<p>Disciplina: Programação Móvel</p> <p>Professor: Karl Phillip</p>UNOESC"));
+               "<p>Disciplina: Programação Móvel I</p> <p>Professor: Karl Phillip</p>UNOESC"));
 }

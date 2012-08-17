@@ -1,17 +1,17 @@
-#include "board.h" 
+#include "board.h"
 
 Board::Board(QWidget *parent)
 {
     setFrameStyle(QFrame::Panel);
     setFocusPolicy(Qt::StrongFocus);
-    ctrlFim = true;
-    pause = false;
-    end = 'i';
-    veloc = 8;
-    vida = 0;
-    vencedor = false;
-    run = false;
-    gameOver = 11;
+    ctrlFim = true; //verifica se o jogador perdeu
+    pause = false; //controle da pausa
+    end = 'i'; //verifica se o jogo iniciou "i" ou está no fim "f"
+    veloc = 8; //Velocidade do jogo
+    vida = 0; //inicializa a vida com zero
+    vencedor = false; //Checa o jogador venceu o jogo
+    run = false; //Checa se o jogo está rodando
+    gameOver = 6; //Define o valor do level para o fim do jogo
 }
 
 void Board::inicio(){
@@ -19,6 +19,7 @@ void Board::inicio(){
     QSound botaoSound("Media/Windows Navigation Start.wav");
     botaoSound.play();
 
+    //Inicia o jogo
     if((pause == false) && (vida == 0) && (run == false)||(vencedor == true)){
         qDebug() << "inicio()";
         level = 1;
@@ -31,17 +32,20 @@ void Board::inicio(){
         emit nivelDificuldade(level);
         emit pontosGanho(score);
 
+    //Inicia o jogo se estiver e pausa
     }else if(pause == true){
         tempo.start(timeoutTime(), this);
         pause = false;
-
+    //Inicia o jogo se o jogador perdeu uma vida
     }else if(vida > 0 && vida < 3){
         start();
+    //Inicia o jogo apos chegar ao fim
     }else if(end == 'f' && ctrlFim == true ){
         reset();
     }
 }
 
+//Auxiliar de início do jogo
 void Board::start()
 {
     if(run == false){
@@ -58,6 +62,7 @@ void Board::start()
     }
 }
 
+//Reset do jogo
 void Board::reset()
 {
     vetorSnakeX.clear();
@@ -76,6 +81,7 @@ void Board::reset()
     inicio();
 }
 
+//pausa do jogo
 void Board:: pausa()
 {
     QSound botaoSound("Media/Windows Navigation Start.wav");
@@ -97,26 +103,32 @@ void Board::paintEvent(QPaintEvent *evento)
 
         painter.drawRect(QRectF(pos_x, pos_y, 8.0, 8.0)); //Cabeça do Snake
 
+        //cria o corpo do Snake
         for(int i=0; i < vetorSnakeX.size(); i++){
-            painter.drawRect(QRect(vetorSnakeX[i],vetorSnakeY[i],8,8));            
+            painter.drawRect(QRect(vetorSnakeX[i],vetorSnakeY[i],8,8));
         }
 
+        //Cria a maçã
         painter.setBrush(Qt::red); //pinta a Maçã de vermelho
         QRectF maca(maca_x, maca_y, 8.0, 8.0); //cria um retangulo nas as coordenadas x, y e a largura e altura pré-definidos
         painter.drawRect(maca); //
     }
 
+    //Mensagem de pausa
     if(pause == true && end != 'f' && vencedor == false){
         painter.setPen(Qt::blue);
         painter.setFont(QFont("Arial", 20));
         painter.drawText(rect(), Qt::AlignCenter, "PAUSA");
     }
 
+    //Mensagem de Fim do Jogo quando perde
     if(end == 'f' && ctrlFim == true && vencedor == false ){
         painter.setPen(Qt::blue);
         painter.setFont(QFont("Arial", 20));
         painter.drawText(rect(), Qt::AlignCenter, "Fim de Jogo!!");
     }
+
+    //Mensagem de Fim do jogo quando vence
     if(vencedor == true ){
         painter.setPen(Qt::blue);
         painter.setFont(QFont("Arial", 20));
@@ -129,36 +141,35 @@ void Board::keyPressEvent(QKeyEvent *event)
     QFrame::keyPressEvent(event);
     switch (event->key()) {
     case Qt::Key_Left:
-        if(direcao != 2)
-            direcao = 1;
+        if(direcao != 2) // checa se a direçao não é para direita
+            direcao = 1; // 1 -Direçao para esquerda
         break;
 
     case Qt::Key_Right:
-        if(direcao != 1)
-            direcao = 2;
+        if(direcao != 1) // checa se a direçao não é para esquerda
+            direcao = 2; // 2 -Direçao para direita
         break;
 
     case Qt::Key_Up:
-        if(direcao != 4)
-            direcao = 3;
+        if(direcao != 4) // checa se a direçao não é para baixo
+            direcao = 3; // 3 -Direçao para cima
         break;
 
     case Qt::Key_Down:
-        if(direcao != 3)
-            direcao = 4;
+        if(direcao != 3) // checa se a direçao não é para cima
+            direcao = 4; // 4 -Direçao para baixo
         break;
 
     default:
     QFrame::keyPressEvent(event);
-    }
-    this->update();
+    }    
 }
 
 void Board::timerEvent(QTimerEvent *event)
 {    
-    saveSocore = score;
+    saveSocore = score; //atribui o valor de score para salvar em arquivo
     QSound som("Media/Speech On.wav");
-    if(pos_x <0 || pos_x > 200 || pos_y < 0 || pos_y > 296){
+    if(pos_x <0 || pos_x > 200 || pos_y < 0 || pos_y > 296){ //Checa se o nake bateu nas bordas
         this->update();
         fimJogo();
     }else{
@@ -176,19 +187,21 @@ void Board::timerEvent(QTimerEvent *event)
             pos_y = pos_y + veloc;
             break;
         }
-        if(pos_x >= 0 && pos_x <= 200 && pos_y >=0 && pos_y < 297){
+        if(pos_x >= 0 && pos_x <= 200 && pos_y >=0 && pos_y < 297){ //Checa se o Snake não bateu nas bordas
             this->update();
-        }                
+        }
 
+        //Colisão da Snake com a maçã quando a direçao do Snake for para esquerda
         if(direcao==1 && (pos_x + veloc) == (maca_x)&& (pos_y == maca_y)){
             score = score +1;
-            tamSnake++;
+            tamSnake++; //variável que determia o tamnho do corpo do Snake
             som.play();
             posicaoMaca();
             emit pontosGanho(score);            
             emit barra_Progresso();
         }
 
+        //Colisão da Snake com a maçã quando a direçao do Snake for para direita
         if(direcao==2 && pos_x == (maca_x + veloc) && (pos_y == maca_y ) ){
             score = score +1;
             tamSnake++;
@@ -198,6 +211,7 @@ void Board::timerEvent(QTimerEvent *event)
             emit barra_Progresso();
         }
 
+        //Colisão da Snake com a maçã quando a direçao do Snake for para cima
         if(direcao==3 && (pos_y + veloc) == (maca_y)&& (pos_x == maca_x)){
             score = score +1;
             tamSnake++;
@@ -207,6 +221,7 @@ void Board::timerEvent(QTimerEvent *event)
             emit barra_Progresso();
         }
 
+        //Colisão da Snake com a maçã quando a direçao do Snake for para baico
         if(direcao==4 && (pos_y) == (maca_y + veloc)&& (pos_x == maca_x)){
             score = score +1;
             tamSnake++;
@@ -214,13 +229,14 @@ void Board::timerEvent(QTimerEvent *event)
             posicaoMaca();
             emit pontosGanho(score);            
             emit barra_Progresso();
-        }        
+        }
     }    
-    colisaoSnke();
-    vetorSnakeX.push_front(pos_x);
-    vetorSnakeY.push_front(pos_y);
+    colisaoSanke();
+    vetorSnakeX.push_front(pos_x); //Cria o corpo do Snake
+    vetorSnakeY.push_front(pos_y); //Cria o corpo do Snake
 
-    while(vetorSnakeX.size()>tamSnake){
+    //Apaga o corpo do Snake até o limite do tamanho do Snake
+    while(vetorSnakeX.size() > tamSnake){
         vetorSnakeX.pop_back();
         vetorSnakeY.pop_back();
     }
@@ -232,7 +248,8 @@ void Board::timerEvent(QTimerEvent *event)
     }
 }
 
-int Board::colisaoSnke(){ //Detecta se o Snake bate no próprio corpo
+//Detecta se o Snake bate no próprio corpo
+void Board::colisaoSanke(){
     for(int x = 1; x < vetorSnakeX.size(); x++){
         if(vetorSnakeX[x] == pos_x && vetorSnakeY[x] == pos_y){
             fimJogo();
@@ -240,17 +257,18 @@ int Board::colisaoSnke(){ //Detecta se o Snake bate no próprio corpo
     }
 }
 
-int Board::colisaoMaca(){ //Detecta se a Maçã está sobre o Snake
+//Detecta se a Maçã está sobre o Snake
+int Board::colisaoMaca(){
     int posMaca = 0;
     for(int x = 1; x < vetorSnakeX.size(); x++){
-        if(vetorSnakeX[x] == maca_x && vetorSnakeY[x] == maca_y)
-            qDebug() << "Maca == Snake";
+        if(vetorSnakeX[x] == maca_x && vetorSnakeY[x] == maca_y)            
             posMaca = 1;
     }
     posMaca = 0;
 }
 
-void Board::incrementaLevel(){ //incrementa o display Level
+//incrementa o display Level
+void Board::incrementaLevel(){
     if(score == (level * 5)){
         QSound som("Media/Windows Notify.wav");
         som.play();
@@ -260,14 +278,17 @@ void Board::incrementaLevel(){ //incrementa o display Level
     }
 }
 
-int Board::randInt_x() { // retorna um valor aleatório entre 0 e 192
+// retorna um valor aleatório entre 0 e 192
+int Board::randInt_x() {
     return qrand() % 192;
 }
 
-int Board:: randInt_y() { // retorna um valor aleatório entre 0 e 304
+// retorna um valor aleatório entre 0 e 304
+int Board:: randInt_y() {
     return qrand() % 296;
 }
 
+//Determina a posiçao da Maçã dentro dos limites da borda
 void Board::posicaoMaca(){    
     int x = 0, y = 0;
     int px = 0, py = 0;
@@ -317,6 +338,7 @@ void Board::posicaoMaca(){
     this->update();
 }
 
+//Define como será o fim do jogo
 void Board::fimJogo()
 {
     vetorSnakeX.clear();
