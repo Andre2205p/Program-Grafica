@@ -1,0 +1,11 @@
+Qpaiter.setBrush () // pintar um desenho na tela
+
+void Borard::scene()
+{
+// calcula novas coordenadas do Nsake
+// verifica colisão entre Snake-maçã
+//Desenha maçã
+//Desenha Snake
+}
+
+Skype: maxphil
